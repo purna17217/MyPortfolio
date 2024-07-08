@@ -864,62 +864,85 @@ img {
         <!--  MAIN JS  -->
         <script>
             /*  MENU SHOW  */ 
-const showMenu = (toggleId, navId) =>{
-    const toggle = document.getElementById(toggleId),
-    nav = document.getElementById(navId)
+// Menu Show
+function showMenu(toggleId, navId) {
+    var toggle = document.getElementById(toggleId);
+    var nav = document.getElementById(navId);
 
-    if(toggle && nav){
-        toggle.addEventListener('click', ()=>{
-            nav.classList.toggle('show')
-        })
+    if (toggle && nav) {
+        toggle.onclick = function() {
+            nav.classList.toggle('show');
+        };
     }
 }
-showMenu('nav-toggle','nav-menu')
+showMenu('nav-toggle', 'nav-menu');
 
-/*     REMOVE MENU MOBILE     */
-const navLink = document.querySelectorAll('.nav__link')
+// Remove Menu Mobile
+var navLinks = document.querySelectorAll('.nav__link');
 
-function linkAction(){
-    const navMenu = document.getElementById('nav-menu')
-    // When we click on each nav__link, we remove the show-menu class
-    navMenu.classList.remove('show')
-}
-navLink.forEach(n => n.addEventListener('click', linkAction))
-
-/*     SCROLL SECTIONS ACTIVE LINK     */
-const sections = document.querySelectorAll('section[id]')
-
-const scrollActive = () =>{
-    const scrollDown = window.scrollY
-
-  sections.forEach(current =>{
-        const sectionHeight = current.offsetHeight,
-              sectionTop = current.offsetTop - 58,
-              sectionId = current.getAttribute('id'),
-              sectionsClass = document.querySelector('.nav__menu a[href*=' + sectionId + ']')
-        
-        if(scrollDown > sectionTop && scrollDown <= sectionTop + sectionHeight){
-            sectionsClass.classList.add('active-link')
-        }else{
-            sectionsClass.classList.remove('active-link')
-        }                                                    
-    })
-}
-window.addEventListener('scroll', scrollActive)
-
-/*  SCROLL REVEAL ANIMATION  */
-const sr = ScrollReveal({
-    origin: 'top',
-    distance: '60px',
-    duration: 2000,
-    delay: 200,
-//     reset: true
+navLinks.forEach(function(navLink) {
+    navLink.onclick = function() {
+        var navMenu = document.getElementById('nav-menu');
+        navMenu.classList.remove('show');
+    };
 });
 
-sr.reveal('.home__data, .about__img, .skills__subtitle, .skills__text',{}); 
-sr.reveal('.home__img, .about__subtitle, .about__text, .skills__img',{delay: 400}); 
-sr.reveal('.home__social-icon',{ interval: 200}); 
-sr.reveal('.skills__data, .work__img, .contact__input',{interval: 200}); 
+// Scroll Sections Active Link
+var sections = document.querySelectorAll('section[id]');
+
+window.onscroll = function() {
+    var scrollY = window.scrollY;
+
+    sections.forEach(function(current) {
+        var sectionHeight = current.offsetHeight;
+        var sectionTop = current.offsetTop - 58;
+        var sectionId = current.getAttribute('id');
+        var navLink = document.querySelector('.nav__menu a[href*=' + sectionId + ']');
+
+        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+            navLink.classList.add('active-link');
+        } else {
+            navLink.classList.remove('active-link');
+        }
+    });
+};
+
+// Scroll Reveal Animation
+function scrollReveal() {
+    var reveals = document.querySelectorAll('.reveal');
+
+    for (var i = 0; i < reveals.length; i++) {
+        var windowHeight = window.innerHeight;
+        var elementTop = reveals[i].getBoundingClientRect().top;
+        var elementVisible = 150;
+
+        if (elementTop < windowHeight - elementVisible) {
+            reveals[i].classList.add('active');
+        } else {
+            reveals[i].classList.remove('active');
+        }
+    }
+}
+
+window.addEventListener('scroll', scrollReveal);
+
+// Initialize scroll reveal elements
+document.querySelectorAll('.home__data, .about__img, .skills__subtitle, .skills__text').forEach(function(el) {
+    el.classList.add('reveal');
+});
+document.querySelectorAll('.home__img, .about__subtitle, .about__text, .skills__img').forEach(function(el) {
+    el.classList.add('reveal');
+    el.style.transitionDelay = '0.4s';
+});
+document.querySelectorAll('.home__social-icon').forEach(function(el) {
+    el.classList.add('reveal');
+    el.style.transitionDelay = '0.2s';
+});
+document.querySelectorAll('.skills__data, .work__img, .contact__input').forEach(function(el) {
+    el.classList.add('reveal');
+    el.style.transitionDelay = '0.2s';
+});
+
 
 var me = document.getElementById('me');
 var backdrop = document.getElementById('me-backdrop-back');
